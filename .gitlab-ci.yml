@@ -1,0 +1,16 @@
+image: docker:git
+
+stages:
+- build
+- publish
+
+build:
+  stage: build
+  script:
+    - docker build -t $REGISTRY_HOST/$IMAGE_NAME .
+
+registry:
+  stage: publish
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY_HOST
+    - docker push $REGISTRY_HOST/$IMAGE_NAME
